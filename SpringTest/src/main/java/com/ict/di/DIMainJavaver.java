@@ -1,18 +1,24 @@
 package com.ict.di;
 
+import com.ict.di.classfile.Broadcast;
 import com.ict.di.classfile.Singer;
 import com.ict.di.classfile.Stage;
 
 public class DIMainJavaver {
 
 	public static void main(String[] args) {
-		// Singer¸¦ »ı¼ºÇØ¼­ ³ë·¡ÇÏ°Ô ¸¸µé¾îº¸¼¼¿ä
+		// Singerë¥¼ ìƒì„±í•´ì„œ ë…¸ë˜í•˜ê²Œ ë§Œë“¤ì–´ë³´ì„¸ìš”
 		Singer forestella = new Singer();
 		forestella.sing();
 		
-		// Stageµµ ¸¸µé¾î¼­ °ø¿¬À» ½ÃÄÑº¸¼¼¿ä
+		// Stageë„ ë§Œë“¤ì–´ì„œ ê³µì—°ì„ ì‹œì¼œë³´ì„¸ìš”
 		Stage stage = new Stage(forestella);
 		stage.perform();
+		
+		// Broadcastë¥¼ ìƒì„±í•´ì„œ ë°©ì†¡ë¬´ëŒ€ë¥¼ ì†¡ì¶œí•´ë³´ê² ìŠµë‹ˆë‹¤.
+		Broadcast broad = new Broadcast(stage);
+		broad.broad();
+		
 	}
 
 }
