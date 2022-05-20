@@ -7,4 +7,36 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<context:component-scan base-package="com.ict.di.classfile" />
+	
+	<!-- 태그로 bean(자바 객체) 빈 컨테이너 추가
+	id : 빈 컨테이너 내부에서 쓸 명칭, class : 구현하고 싶은 클래스의 이름을 패키지명부터 -->
+	<bean id="crossover" class="com.ict.di.classfile.Forestella"></bean>
+	
+	<bean id="crossoverStage" class="com.ict.di.classfile.Stage">
+		<!--  <constructor-arg ref="crossover"></constructor-arg>-->
+		<!-- setter주입시는 property태그를 쓰고
+		name에는 대입받을 멤버변수명, ref에는 집어늫을 bean의 명칭을 적습니다. -->
+		<property name="singer" ref="crossover"></property>
+	</bean>
+	<!-- 다른 가수를 이용해서 2번째 stage를 생성해주신 다음, springmain에서
+	그 stage를 생성해서 perform() 을 실행시켜 주세요 -->
+	
+	
+	
+	<!-- broadCast 2개를 생성해주세요. 하나는 crossoverStage를 주입받고
+	다른 하나는 balladStage를 주입받도록 생성해주세요. Broadcast 클래스내부 @Autowired는 해제해주세요 -->
+	<bean id="dom" class="com.ict.di.classfile.Broadcast">
+		<constructor-arg ref="crossoverStage"></constructor-arg>
+	</bean>
+	
+	
+	<!--  satellite 도 마저 만들어서 사용해보세요 -->
+	<bean id="house" class="com.ict.di.classfile.Satellite">
+		<constructor-arg ref="dom"></constructor-arg>
+	</bean>
+	<bean id="school" class="com.ict.di.classfile.Satellite">
+		<constructor-arg ref="sea"></constructor-arg>
+	</bean>
+	
+	
 </beans>

@@ -13,6 +13,8 @@ public class Broadcast {
 	public Broadcast(Stage stage) {
 			this.stage = stage;
 	}
+	
+	
 	// 방송용 까지만 자체적으로 담당
 	// 이후는 stage의 perform메서드가 담당
 	public void broad() {
