@@ -34,9 +34,10 @@
 	<bean id="house" class="com.ict.di.classfile.Satellite">
 		<constructor-arg ref="dom"></constructor-arg>
 	</bean>
+	<!-- 
 	<bean id="school" class="com.ict.di.classfile.Satellite">
 		<constructor-arg ref="sea"></constructor-arg>
 	</bean>
-	
+	 -->
 	
 </beans>
