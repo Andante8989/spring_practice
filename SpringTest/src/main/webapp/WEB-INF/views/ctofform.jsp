@@ -7,6 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>${dNum }</h2>
+	<form action="/ctof" method="post">
+		<input type="number" placeholder="온도를 입력해주세요" name="cel" required> 
+		<input type="submit" value="제출">
+	</form>
 </body>
 </html>

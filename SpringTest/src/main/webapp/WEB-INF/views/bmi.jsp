@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>${dNum }</h2>
+	<h2>당신의 키는 ${h }</h2>
+	<h2>당신의 몸무게는 ${w }</h2>
+	<h2>당신의 bmi 지수는 ${b } 입니다.</h2>
 </body>
 </html>

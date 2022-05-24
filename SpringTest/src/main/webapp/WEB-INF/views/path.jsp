@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>${dNum }</h2>
+	<h2>${page }페이지 조회중입니다.</h2>
 </body>
 </html>

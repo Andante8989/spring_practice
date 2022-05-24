@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>${dNum }</h2>
+	<h1 style='color:blue;'>섭씨온도 : ${c}, 화씨온도 : ${f }</h1>
 </body>
 </html>
