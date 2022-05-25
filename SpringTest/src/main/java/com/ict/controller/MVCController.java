@@ -1,11 +1,16 @@
 package com.ict.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.ict.domain.TestVO;
 
 // 빈 컨테이너에 넣어주세요(등록된 컨트롤러만 동작합니다.)
 @Controller
@@ -97,7 +102,51 @@ public class MVCController {
 		return "path";
 	}
 	
+	// PathVariable을 활용해 환전 조회 프로그램을 만들어보겠습니다
+	// /exchage/원화
+	// 위의 형식으로 원화를 입력하면, 여러분들이 여행하고 싶은 나라의 통화로 환전했을때
+	// 나오는 금액을 화면에 출력해주시면 됩니다.
+	// exchange.jsp에 표현됩니다
+	@RequestMapping(value="/exchange/{won}")
+	public String exchange(@PathVariable int won, Model model) {
+		double myr = won * 287.88;
+		System.out.println(won);
+		model.addAttribute("won", won);
+		model.addAttribute("myr", myr);
+		return "exchange";
+	}
 	
+	// void 리턴을 하는 컨트롤러 메서드는 RequestMapping에 적힌 주소와 일치하는 이름의 .jsp로 연결됩니다
+	@RequestMapping("/spring")
+	public void spring() {
+		System.out.println("spring 주소 감지");
+	}
+	
+	// 동일한 이름의 파라미터가 여럿 전달되는 경우는 ArrayList<>, String[] 등을 이용해 처리가 가능합니다
+	@GetMapping("/list")
+	public String getList(@RequestParam("ids") ArrayList<String> ids, Model model) {
+		System.out.println(ids);
+		model.addAttribute("ids", ids);
+		return "list";
+	}
+	
+	// 원래 파라미터의 자료형이 int, String 등이었던 경우는
+	// 단일 자료형이었기 때문에 get, post방식으로 전달되는 데이터를
+	// 자동으로 받아서 처리할 수 있었습니다.
+	// 현재 TestVO 내부에는 int age, String name이 들어있고
+	// TestVO를 아래와 같이 선언하는 것만으로도 int age, String name 을 선언하는 것과 
+	// 같은 효과를 볼 수 있습니다
+	// 즉 ?age=000&name=0000 라고 적는 데이터를 받아올 수 있습니다
+	@GetMapping("/getVO")
+	public String getVO(TestVO vo, Model model) {
+		System.out.println("받아온 객체 : " + vo);
+		model.addAttribute("vo", vo);
+		return "voview";
+	}
+	@GetMapping("/voform")
+	public void voform() {
+		
+	}
 	
 	
 	
