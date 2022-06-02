@@ -1,11 +1,13 @@
 package com.ict.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/spring/*")
+@RequestMapping("/spring/")
 public class SpringController {
 	
 	@RequestMapping("")
@@ -17,6 +19,11 @@ public class SpringController {
 			method = {RequestMethod.GET, RequestMethod.POST})
 	public void baseGet() {
 		System.out.println("base get");
+	}
+	
+	@PostMapping("/basePost")
+	public void baseOnlyPost() {
+		System.out.println("base only post");
 	}
 	
 }
