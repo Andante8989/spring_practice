@@ -26,4 +26,5 @@ public class SpringController {
 		System.out.println("base only post");
 	}
 	
+	
 }
