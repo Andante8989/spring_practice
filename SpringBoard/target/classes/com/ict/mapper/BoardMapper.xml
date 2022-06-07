@@ -28,6 +28,10 @@
 	<update id="update">
 		UPDATE board_tbl SET title=#{title}, content=#{content}, writer=#{writer}, updateDate=SYSDATE WHERE bno=#{bno}
 	</update>
+	
+	<select id="boardDetail" resultType="com.ict.persistent.BoardVO">
+		SELECT * FROM board_tbl WHERE bno=#{bno}
+	</select>
 </mapper>
 
 
