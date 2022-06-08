@@ -9,16 +9,30 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<table class="table">
+	<table class="table table-hover table-primary">
 		<thead>
 			<tr>
-				<th>
-				</th>
+				<th>글번호</th>
+				<th>글제목</th>
+				<th>글쓴이</th>
+				<th>작성날짜</th>
+				<th>수정날짜</th>
 			</tr>
 		</thead>
 		<tbody>
-			${boardList }
+			<c:forEach var="board" items="${boardList }">
+				<tr>
+					<td>${board.bno }</td>
+				    <td><a href="/board/detail?bno=${board.bno }">${board.title }</a></td>
+					<td>${board.writer }</td>
+					<td>${board.regDate }</td>
+					<td>${board.updateDate }</td>
+				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
+	<form action="/board/insert" method="get">
+		<input type="submit" value="글쓰기">
+	</form>
 </body>
 </html>
