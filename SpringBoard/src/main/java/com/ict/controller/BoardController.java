@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ict.persistent.BoardVO;
+import com.ict.persistent.Criteria;
 import com.ict.service.BoardService;
 
 // bean container에 넣어보세요
@@ -27,8 +29,9 @@ public class BoardController {
 	// list.jsp로 연결되면 되고, getList()메서드로 가져온 전체 글 목록을
 	// 포워딩해서 화면에 뿌려주면, 글번호, 글제목, 글쓴이, 날짜, 수정날짜를 화면에 출력해줍니다.
 	@RequestMapping(value="/list")
-	public String getBoardlist(Model model) {
-		List<BoardVO> boardList = service.getList();
+					// @RequestParam의 defaultValue를 통해 값이 안들어올때 자동으로 배정할 값을 정할수 있음
+	public String getBoardlist(Criteria cri, Model model) {
+		List<BoardVO> boardList = service.getList(cri);
 		model.addAttribute("boardList", boardList);
 		return "/board/list";
 	}
@@ -85,9 +88,8 @@ public class BoardController {
 	}
 	
 	@PostMapping("/update")
-	public String updateBoard(BoardVO board, Long bno, Model model) {
+	public String updateBoard(BoardVO board) {
 		service.update(board);
-		model.addAttribute("bno", bno);
-		return "redirect:/board/detail";
+		return "redirect:/board/detail?bno=" + board.getBno();
 	}
 }
