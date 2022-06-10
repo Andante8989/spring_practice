@@ -20,7 +20,7 @@ public class BoardServiceTests {
 	
 	//@Test
 	public void getList() {
-		log.info(service.getList());
+		//log.info(service.getList());
 	}
 	
 	// insert 도 테스트 한 번 해주세요.
@@ -48,8 +48,13 @@ public class BoardServiceTests {
 		service.update(vo);
 	}
 	
-	@Test
+	//@Test
 	public void boardDetail() {
 		log.info(service.boardDetail(2L));
+	}
+	
+	@Test
+	public void getBoardCountTest() {
+		service.getBoardCount();
 	}
 }

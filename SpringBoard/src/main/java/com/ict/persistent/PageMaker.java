@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PageMaker {
 	
-	private int totalBoard;
+	private Long totalBoard;
 	private int startPage;
 	private int endPage;
 	private boolean prev;
@@ -33,7 +33,7 @@ public class PageMaker {
 		
 	}
 	
-	public void setTotalBoard(int totalBoard) {
+	public void setTotalBoard(Long totalBoard) {
 		this.totalBoard = totalBoard;
 		
 		calcData();

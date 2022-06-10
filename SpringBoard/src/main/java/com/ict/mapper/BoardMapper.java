@@ -26,4 +26,6 @@ public interface BoardMapper {
 	public void update(BoardVO vo);
 	
 	public BoardVO boardDetail(Long bno);
+	
+	public Long getBoardCount();
 }

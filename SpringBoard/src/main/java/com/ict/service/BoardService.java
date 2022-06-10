@@ -22,4 +22,7 @@ public interface BoardService {
 	public void update(BoardVO vo);
 	
 	public BoardVO boardDetail(Long bno);
+	
+	// mapper에서 그대로 가져옵니다
+	public Long getBoardCount();
 }

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ict.persistent.BoardVO;
 import com.ict.persistent.Criteria;
+import com.ict.persistent.PageMaker;
+import com.ict.persistent.SearchCriteria;
 import com.ict.service.BoardService;
 
 // bean container에 넣어보세요
@@ -30,9 +32,17 @@ public class BoardController {
 	// 포워딩해서 화면에 뿌려주면, 글번호, 글제목, 글쓴이, 날짜, 수정날짜를 화면에 출력해줍니다.
 	@RequestMapping(value="/list")
 					// @RequestParam의 defaultValue를 통해 값이 안들어올때 자동으로 배정할 값을 정할수 있음
-	public String getBoardlist(Criteria cri, Model model) {
+	public String getBoardlist(SearchCriteria cri, Model model) {
+		if (cri.getPage() == 0) {
+			cri.setPage(1);
+		}
 		List<BoardVO> boardList = service.getList(cri);
 		model.addAttribute("boardList", boardList);
+		// PageMaker 생성 및 cri주입, 그리고 바인딩해서 보내기
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalBoard(service.getBoardCount());
+		model.addAttribute("pageMaker", pageMaker);
 		return "/board/list";
 	}
 	

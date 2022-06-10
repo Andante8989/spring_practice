@@ -23,7 +23,7 @@ public class BoardMapperTests {
 	
 	//@Test
 	public void testGetList() {
-		log.info(mapper.getList());
+		//log.info(mapper.getList());
 	}
 	//@Test
 	public void testInsert() {
@@ -57,9 +57,14 @@ public class BoardMapperTests {
 		mapper.update(vo);
 	}
 	
-	@Test
+	//@Test
 	public void testBoardDetail() {
 		log.info(mapper.boardDetail(2L));
+	}
+	
+	@Test
+	public void getBoardCountTest() {
+		mapper.getBoardCount();
 	}
 }
 
