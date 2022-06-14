@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ict.persistent.BoardVO;
 import com.ict.persistent.Criteria;
@@ -41,7 +42,7 @@ public class BoardController {
 		// PageMaker 생성 및 cri주입, 그리고 바인딩해서 보내기
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(cri);
-		pageMaker.setTotalBoard(service.getBoardCount());
+		pageMaker.setTotalBoard(service.getBoardCount(cri));
 		model.addAttribute("pageMaker", pageMaker);
 		return "/board/list";
 	}
@@ -80,10 +81,14 @@ public class BoardController {
 	
 	// 글삭제 post방식으로 처리하도록 합니다
 	@PostMapping("/delete")
-	public String deleteBoard(Long bno) {
+	public String deleteBoard(Long bno, SearchCriteria cri, RedirectAttributes rttr, BoardVO board) {
 		// 삭제 후 리스트로 돌아갈 수 있도록 내부 로직을 만들어주시고
 		// 디테일 페이지에 삭제요청을 넣을 수 있는 폼을 만들어주세요
 		service.delete(bno);
+		rttr.addAttribute("page", cri.getPage());
+		rttr.addAttribute("keyword", cri.getKeyword());
+		rttr.addAttribute("searchType", cri.getSearchType());
+		rttr.addAttribute("bno", board.getBno());
 		return "redirect:/board/list";
 	}
 	
@@ -98,8 +103,13 @@ public class BoardController {
 	}
 	
 	@PostMapping("/update")
-	public String updateBoard(BoardVO board) {
+	public String updateBoard(BoardVO board, SearchCriteria cri, RedirectAttributes rttr) {
 		service.update(board);
+		
+		rttr.addAttribute("page", cri.getPage());
+		rttr.addAttribute("keyword", cri.getKeyword());
+		rttr.addAttribute("searchType", cri.getSearchType());
+		
 		return "redirect:/board/detail?bno=" + board.getBno();
 	}
 }

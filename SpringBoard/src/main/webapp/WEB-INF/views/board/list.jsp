@@ -24,7 +24,7 @@
 			<c:forEach var="board" items="${boardList }">
 				<tr>
 					<td>${board.bno }</td>
-				    <td><a href="/board/detail?bno=${board.bno }">${board.title }</a></td>
+				    <td><a href="/board/detail?bno=${board.bno }&page=${pageMaker.cri.page }&searchType=${pageMaker.cri.searchType}&keyword=${pageMaker.cri.keyword}">${board.title }</a></td>
 					<td>${board.writer }</td>
 					<td>${board.regDate }</td>
 					<td>${board.updateDate }</td>
@@ -36,21 +36,21 @@
 	<ul class="pagination">
 		<c:if test="${pageMaker.prev }">
 		    <li class="page-item">
-		      <a class="page-link" href="/board/list?page=${pageMaker.startPage - 1 }" aria-label="Previous">
+		      <a class="page-link" href="/board/list?page=${pageMaker.startPage - 1 }&searchType=${pageMaker.cri.searchType}&keyword=${pageMaker.cri.keyword}" aria-label="Previous">
 		        <span aria-hidden="true">&laquo;prev</span>
 		      </a>
 		    </li>
 	   </c:if>
 	   <c:forEach var="pNum" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
 	   		<li class="page-item ${pNum eq pageMaker.cri.page ? 'active' : ''}  ">
-		      <a class="page-link" href="/board/list?page=${pNum}&searchType=${cri.searchType}&keyword=${cri.keyword}" aria-label="Previous">
+		      <a class="page-link" href="/board/list?page=${pNum}&searchType=${pageMaker.cri.searchType}&keyword=${pageMaker.cri.keyword}" aria-label="Previous">
 		        <span aria-hidden="true">${pNum }</span>
 		      </a>
 		    </li>
 	   </c:forEach>
 	   <c:if test="${pageMaker.next }">
 	   		<li class="page-item">
-	   		 <a class="page-link" href="/board/list?page=${pageMaker.endPage + 1 }" aria-label="next">
+	   		 <a class="page-link" href="/board/list?page=${pageMaker.endPage + 1 }&searchType=${pageMaker.cri.searchType}&keyword=${pageMaker.cri.keyword}" aria-label="next">
 	   		 	<span aria-hidden="true">next&raquo;</span>
 	   		 </a>
 	   		</li>
@@ -60,6 +60,9 @@
 	
 	<form action="/board/insert" method="get">
 		<input type="submit" value="글쓰기">
+	</form>
+	<form action="/board/list" method="get">
+		<input type="submit" value="전체 글보기">
 	</form>
 	
 	<select name="sarchType">
@@ -95,14 +98,14 @@
 	<input type="text"
 		name="keyword"
 		id="keywordInput"
-		value="${cri.keyword }">
+		value="${cri.keyword }" >
 	<button id="searchBtn">Search</button><br/>
 	${pageMaker }
 	
 	<script>
 	<!--  검색버튼 작동 --> 
 	$('#searchBtn' ).on("click", function(event){
-	
+	    
 		self.location = "list"
 			+ "?page=1"
 			+ "&searchType="

@@ -15,13 +15,17 @@ ${board }<br/>
 수정날짜 : ${board.updateDate }
 <form action="/board/delete" method="post">
 	<input type="hidden" name="bno" value="${board.bno }">
+	<input type="hidden" name="keyword" value="${param.keyword }">
+	<input type="hidden" name="searchType" value="${param.searchType }">
+	<input type="hidden" name="page" value="${param.page }">
 	<input type="submit" value="삭제하기">
 </form>
-<form action="/board/list" method="get">
-	<input type="submit" value="목록으로 돌아가기">
-</form>
+<a href="/board/list?page=${param.page}&searchType=${param.searchType}&keyword=${param.keyword}"><button>목록으로 돌아가기</button></a>
 <form action="/board/updateForm" method="post">
 	<input type="hidden" name="bno" value="${board.bno }">
+	<input type="hidden" name="keyword" value="${param.keyword }">
+	<input type="hidden" name="searchType" value="${param.searchType }">
+	<input type="hidden" name="page" value="${param.page }">
 	<input type="submit" value="수정하기">
 </form>
 </body>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ict.persistent.BoardVO;
 import com.ict.persistent.Criteria;
+import com.ict.persistent.SearchCriteria;
 
 public interface BoardService {
 	
@@ -13,7 +14,7 @@ public interface BoardService {
 	// 현재는 그냥 로직별로 하나씩 메서드를 만들어주시면 됩니다.
 	// 단, 나중에 사용자에게는 글삭제 이지만, 백로직에서는 글과 댓글이 모두 삭제된다던지... 하는 식으로
 	// 사용자 기준의 하나의 동작과 로직개념적 하나의 동작이 일치하지 않을수도 있으니 주의해야합니다.
-	public List<BoardVO> getList(Criteria cri);
+	public List<BoardVO> getList(SearchCriteria cri);
 	
 	public void insert(BoardVO vo);
 
@@ -24,5 +25,5 @@ public interface BoardService {
 	public BoardVO boardDetail(Long bno);
 	
 	// mapper에서 그대로 가져옵니다
-	public Long getBoardCount();
+	public Long getBoardCount(SearchCriteria cri);
 }
