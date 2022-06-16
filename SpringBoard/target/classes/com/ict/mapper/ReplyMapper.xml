@@ -10,7 +10,8 @@
 	</select>
 	
 	<select id="create">
-		INSERT INTO reply_tbl(rno, bno, reply, replyer) VALUES (reply_num.nextval, #{bno}, #{reply}, #{replyer})
+		INSERT INTO reply_tbl(rno, bno, reply, replyer) 
+			VALUES (reply_num.nextval, #{bno}, #{reply}, #{replyer})
 	</select>
 	
 	<select id="update">
