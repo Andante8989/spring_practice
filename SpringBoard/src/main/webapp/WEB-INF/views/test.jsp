@@ -7,6 +7,7 @@
 /resources/경로 형식으로 적으면 가져올 수 있습니다
 이렇게 경로가 자동으로 잡히는 이유는 servlet-context.xml에 설정이 잡혀있기 때문입니다. -->
 	<link rel="stylesheet" href="/resources/modal.css">
+	
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -30,7 +31,7 @@
 	<div id="modDiv" style="display:none;">
 		<div class="modal-title"></div>
 		<div>
-			<input type="text" id="replytext">
+			<input type="text" id="replyText">
 		</div>
 		<div>
 			<button type="button" id="replyModBtn">Modify</button>
@@ -111,16 +112,26 @@
 			var rno = reply.attr("data-rno");
 			let replytext = reply.text();
 			$(".modal-title").html(rno);
-			$("#replytext").val(replytext);
+			$("#replyText").val(replytext);
 			$("#modDiv").show("slow");
 		});
-		
+
 		// 댓글 전체 조회버튼 이벤트 
 		$("#replyInfo").on("click", function() {
 			getAllList();
 		});
+		
+		
+		
+		// 수정 버튼 이벤트
+		
+		
+
 	</script>
-	
+		<!-- 댓글 삭제 이벤트 resources폴더로 이동후 링크로 보내기 
+		css파일의 경우는 link태그의 href로 경로지정, js파일은 script로 경로지정을 합니다 -->
+		<script src="/resources/delete.js"></script>
+		<script src="/resources/modify.js"></script>
 	
 </body>
 </html>
