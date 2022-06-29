@@ -3,6 +3,8 @@ package com.ict.mapper;
 import java.sql.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ict.persistent.BoardVO;
 import com.ict.persistent.Criteria;
 import com.ict.persistent.SearchCriteria;
@@ -28,6 +30,11 @@ public interface BoardMapper {
 	
 	public BoardVO boardDetail(Long bno);
 	
+	// 게시글 전체 개수를 카운팅
 	public Long getBoardCount(SearchCriteria cri);
+	
+	// 댓글이 써질때마다 board_tbl의 댓글개수를 올려주는 메서드
+	public void updateReplyCount(@Param("bno") Long bno,
+								@Param("amount") int amount);
 	
 }

@@ -13,4 +13,7 @@ public interface ReplyMapper {
 	public void update(ReplyVO vo);
 	
 	public void delete(Long rno);
+	
+	// 댓글번호 rno 입력시 해당 댓글이 속한 글번호 bno를 리턴받는 쿼리문
+	public Long getBno(Long rno);
 }
