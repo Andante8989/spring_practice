@@ -66,6 +66,11 @@ public class BoardMapperTests {
 	public void getBoardCountTest() {
 		mapper.getBoardCount();
 	}
+	
+	@Test
+	public void testRemoveReply() {
+		
+	}
 }
 
 
