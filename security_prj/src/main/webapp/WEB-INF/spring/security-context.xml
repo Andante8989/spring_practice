@@ -20,9 +20,9 @@
 
 		<!-- /secu/member는 Member에게만 접근 허용 -->
 		<!-- access에서 ROLE_ 까지는 필수이며 뒤에 MEMBER는 명칭을 바꿔도 된다 -->
-		<security:intercept-url pattern="/secu/member" access="hasRole('ROLE_MEMBER')" />
+	<!--  <security:intercept-url pattern="/secu/member" access="hasRole('ROLE_MEMBER')" /> -->	
 		<!-- /secu/admin 접속시 모든 admin에게만 접근 허용 -->
-		<security:intercept-url pattern="/secu/admin" access="hasRole('ROLE_ADMIN')" />
+	<!--  <security:intercept-url pattern="/secu/admin" access="hasRole('ROLE_ADMIN')" /> -->	
 		
 		<!-- 이게 로그인창 --> <!-- 커스텀 로그인 로직으로 적용하기위한 구문 -->
 		<security:form-login login-page="/customLogin"
@@ -34,6 +34,8 @@
 		
 		<!-- invalidate 구문으로 로그아웃시 세션파기 -->
 		<security:logout logout-url="/customLogout" invalidate-session="true"/>
+		
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
 	</security:http>
 	
 	<!-- 인증 부여하는곳 -->

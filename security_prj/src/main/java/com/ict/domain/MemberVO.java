@@ -9,7 +9,7 @@ public class MemberVO {
 	
 	private String userid;
 	private String userpw;
-	private String username;
+	private String userName;
 	private boolean enabled;
 	
 	private List<AuthVO> authList;

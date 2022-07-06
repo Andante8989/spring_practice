@@ -15,7 +15,7 @@
 		<!-- property는 db에있는 그대로 카멜케이스나 언더바__ 쓰지만 column은 쓰지않는다 -->
 		<result property="userid" column="userid" />
 		<result property="userpw" column="userpw" />
-		<result property="username" column="username" />
+		<result property="userName" column="username" />
 		<!-- MemberVO의  List<AuthVO>가 아래의 collection이라고 보면 된다
 		     즉, 단일변수는 result, List는 collection -->
 		<collection property="authList" resultMap="authMap" >
