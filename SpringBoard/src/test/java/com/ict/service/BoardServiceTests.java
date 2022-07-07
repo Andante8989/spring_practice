@@ -53,8 +53,4 @@ public class BoardServiceTests {
 		log.info(service.boardDetail(2L));
 	}
 	
-	@Test
-	public void getBoardCountTest() {
-		service.getBoardCount();
-	}
 }

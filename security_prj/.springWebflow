@@ -3,9 +3,5 @@
 	<version>1</version>
 	<pluginVersion><![CDATA[3.9.22.202204280911-RELEASE]]></pluginVersion>
 	<configs>
-		<config>
-			<file>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</file>
-			<name><![CDATA[servlet-context]]></name>
-		</config>
 	</configs>
 </webflow-project-description>

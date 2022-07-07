@@ -35,5 +35,21 @@
 			member_tbl m LEFT OUTER JOIN member_auth a on m.userid = a.userid
 			WHERE m.userid = #{userid}
 	</select>
+	
+	<insert id="insertMemberTbl">
+		INSERT INTO MEMBER_TBL(userid, userpw, username)
+			VALUES
+		(#{userid}, #{userpw}, #{userName})
+	</insert>
+	
+	<update id="insertMemberAuth">
+		INSERT ALL
+		<foreach collection="authList" item="item" separator=" ">
+			INTO MEMBER_AUTH(userid, auth)
+				VALUES
+			(#{item.userid}, #{item.auth})
+		</foreach>
+		SELECT * FROM DUAL	
+	</update>
 
 </mapper>
