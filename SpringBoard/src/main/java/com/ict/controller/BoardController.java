@@ -3,6 +3,7 @@ package com.ict.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class BoardController {
 	@Autowired
 	private BoardService service;
 	
+	@PreAuthorize("permitAll")
 	// /board/list 주소로 게시물 전체의 목록을 표현하는 컨트롤러를 만들어주세요
 	// list.jsp로 연결되면 되고, getList()메서드로 가져온 전체 글 목록을
 	// 포워딩해서 화면에 뿌려주면, 글번호, 글제목, 글쓴이, 날짜, 수정날짜를 화면에 출력해줍니다.
@@ -52,7 +54,7 @@ public class BoardController {
 	// /board/detail.jsp입니다
 	// getBoardList처럼 포워딩해서 화면에 해당 글 하나에 대한 정보만 보여주면 됩니다,
 	// service, mapper쪽에도 getDetail로 메서드를 
-	
+	@PreAuthorize("permitAll")
 	@GetMapping("/detail")
 	public String getBoardDetail(Long bno, Model model) {
 		BoardVO board = service.boardDetail(bno);
@@ -63,12 +65,13 @@ public class BoardController {
 	// 글 쓰기는 말 그대로 글을 써주는 로직인데
 	// 폼으로 연결되는 페이지가 하나 있어야하고
 	// 그다음 폼에서 날려주는 로직을 처리해주는 페이지가 하나 더 있어야 합니다.
-	
+	@PreAuthorize("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')")
 	@GetMapping("/insert")
 	public String insertForm() {
 		return "/board/insertForm";
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')")
 	// post방식으로 /insert로 들어오는 자료를 받아  콘솔에 찍어주세요
 	@PostMapping("/insert")
 	public String boardInsert(BoardVO board) {
@@ -79,6 +82,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	@PreAuthorize("ROLE_ADMIN")
 	// 글삭제 post방식으로 처리하도록 합니다
 	@PostMapping("/delete")
 	public String deleteBoard(Long bno, SearchCriteria cri, RedirectAttributes rttr, BoardVO board) {
@@ -92,6 +96,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	@PreAuthorize("ROLE_ADMIN")
 	// 글 수정 요청도 post로 받습니다
 	@PostMapping("/updateForm")
 	public String updateBoardForm(Long bno, Model model) {
@@ -102,6 +107,7 @@ public class BoardController {
 		return "/board/updateForm";
 	}
 	
+	@PreAuthorize("ROLE_ADMIN")
 	@PostMapping("/update")
 	public String updateBoard(BoardVO board, SearchCriteria cri, RedirectAttributes rttr) {
 		service.update(board);
@@ -112,4 +118,6 @@ public class BoardController {
 		
 		return "redirect:/board/detail?bno=" + board.getBno();
 	}
+	
+	
 }

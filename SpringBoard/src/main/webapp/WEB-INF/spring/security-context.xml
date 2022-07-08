@@ -9,26 +9,30 @@
 						
 						
 	<bean id="customAccessDenied" class="com.ict.security.CustomAccessDeniedHandler" />
+	<bean id="customLoginSuccess" class="com.ict.security.CustomLoginSuccessHandler" />
+	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<bean id="customUserDetailsService" class="com.ict.security.CustomUserDetailsService"/>
 
 	<security:http>
 		
-		<!--  /secu/all 접속시 모든 유저에게 접근 허용 -->
-		<security:intercept-url pattern="/secu/all" access="permitAll" />
-		
-		<security:intercept-url pattern="/board/list" access="hasRole('ROLE_MEMBER')" />
-		
-		<security:form-login login-page="/customLogin"/>
+		<security:form-login login-page="/customLogin"
+			authentication-success-handler-ref="customLoginSuccess"/>
 		
 		<security:access-denied-handler ref="customAccessDenied"/>
+		
+		<security:logout logout-url="/customLogout" invalidate-session="true" 
+			delete-cookies="remember-me,JSESSIONID"/>
+		
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800" />
 	
 	</security:http>
 	
 	<security:authentication-manager>
 	
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER" />
-			</security:user-service>
+		<security:authentication-provider user-service-ref="customUserDetailsService" >
+			
+			<security:password-encoder ref="bcryptPasswordEncoder" />
+											
 		</security:authentication-provider>
 	
 	</security:authentication-manager>
