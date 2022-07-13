@@ -3,6 +3,25 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+	.uploadResult {
+		width:100%;
+		background-color: gray;
+	}
+	.uploadResult ul {
+		display:flex;
+		flex-flow:row;
+		justify-content:center;
+		align-items: center;
+	}
+	.uploadResult ul li {
+		list-style: none;
+		padding : 10px;
+	}
+	.uploadResult ul li img {
+		width: 20px;
+	}
+</style>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -86,16 +105,51 @@
 				
 				$(uploadResultArr).each(function(i, obj) {
 					
-					str += `<li>\${obj.fileName}</li>`;
+					if(!obj.image) {
+						
+						let fileCallPath = encodeURIComponent(
+								obj.uploadPath + "/"
+							+   obj.uuid + "_" + obj.fileName);
+						str += `<li><a href='/download?fileName=\${fileCallPath}'>
+								<img src='/resources/attach.png'>\${obj.fileName}</a>
+								<span data-file='\${fileCallPath}' data-type='file'>X<span>
+								</li>`; 
+					} else {
+						//str += `<li>\${obj.fileName}</li>`;
+						let fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" +
+															obj.uuid + "_" + obj.fileName);
+						
+						let fileCallPath2 = encodeURIComponent(obj.uploadPath + obj.uuid + "_" + obj.fileName);
+						
+						console.log(fileCallPath);
+						console.log(fileCallPath2);
+						str += `<li><a href='/download?fileName=\${fileCallPath2}'>
+						<img src='/display?fileName=\${fileCallPath}'>\${obj.fileName}</a>
+						<span data-file='\${fileCallPath2}' data-type='image'>X<span>
+						</li>`;
+					}
+					
 				});
 				uploadResult.append(str);
 			} // showUploadedFile
+
 			
 			
 		}); // documnet ready
 		
-		
-		
+		$(".uploadResult").on("click", "span", function(e) {
+			// 파일이름을 span태그 내부의 data-file에서 얻어와서 저장
+			let targetFile = $(this).data("file");
+			// 이미지 여부를 span태그 내부의 data-type에서 얻어와서 저장
+			let type= $(this).data("type");
+			
+			// 클릭한 span태그와 엮여잇는 li를 tagetLi에 저장
+			let targetLi = $(this).closest("li");
+			
+			// 클릭한 li요소를 화면에서 삭제함(파일은 남아있음)
+			targetLi.remove();
+		});
+
 	
 	
 	</script>
