@@ -1,26 +1,50 @@
 package com.ict.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ict.persistent.AttachFileDTO;
 import com.ict.persistent.BoardVO;
 import com.ict.persistent.Criteria;
 import com.ict.persistent.PageMaker;
 import com.ict.persistent.SearchCriteria;
 import com.ict.service.BoardService;
 
+import lombok.extern.log4j.Log4j;
+import net.coobird.thumbnailator.Thumbnailator;
+
 // bean container에 넣어보세요
 @Controller
+@Log4j
 // 주소 /board가 붙도록 처리해주세요
 @RequestMapping(value="/board")
 public class BoardController {
@@ -28,6 +52,28 @@ public class BoardController {
 	// 컨트롤러는 ???를 호출합니다. autowired로 주입해주세요.
 	@Autowired
 	private BoardService service;
+	
+	// 파일 업로드시 보조해주는 메서드 추가
+	private boolean checkImageType(File file) {
+		try {
+			String contentType = Files.probeContentType(file.toPath());
+					
+			return contentType.startsWith("image");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private String getFolder() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date date = new Date();
+		log.info("날짜 갓 생성 : " + date);
+		String str = sdf.format(date);
+		log.info("포맷 형식이 바뀐 날짜 : " + str);
+		return str.replace("-", File.separator);
+	}
 	
 	@PreAuthorize("permitAll")
 	// /board/list 주소로 게시물 전체의 목록을 표현하는 컨트롤러를 만들어주세요
@@ -119,5 +165,141 @@ public class BoardController {
 		return "redirect:/board/detail?bno=" + board.getBno();
 	}
 	
+	
+	@PostMapping(value="/uploadFormAction", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<AttachFileDTO>> uploadFormPost(MultipartFile[] uploadFile) {
+		
+		List<AttachFileDTO> list = new ArrayList<>();
+		
+		String uploadFolder = "C:\\upload_data\\temp";
+		
+		String uploadFolderPath = getFolder();
+		
+		File uploadPath = new File(uploadFolder, uploadFolderPath);
+		
+		if(uploadPath.exists() == false) {
+			uploadPath.mkdirs();
+		}
+		
+		for(MultipartFile multipartFile : uploadFile) {
+			
+			AttachFileDTO attachDTO = new AttachFileDTO();
+			
+			String uploadFileName = multipartFile.getOriginalFilename();
+			
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
+			
+			log.info("only file name : " + uploadFileName);
+			
+			attachDTO.setFileName(uploadFileName);
+			
+			UUID uuid = UUID.randomUUID();
+			
+			uploadFileName = uuid.toString() + "_" + uploadFileName;
+			
+			try {
+				File saveFile = new File(uploadPath, uploadFileName);
+				multipartFile.transferTo(saveFile);
+				
+				attachDTO.setUuid(uuid.toString());
+				attachDTO.setUploadPath(uploadFolderPath);
+				
+				if(checkImageType(saveFile)) {
+					attachDTO.setImage(true);
+					
+					FileOutputStream thumbnail = new FileOutputStream(
+							new File(uploadPath, "s_" + uploadFileName));
+					
+					Thumbnailator.createThumbnail(
+							multipartFile.getInputStream(), thumbnail,100, 100);
+					
+					thumbnail.close();
+				}
+				list.add(attachDTO);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} // for문 끝나는 지점
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	@GetMapping("/display")
+	@ResponseBody
+	// byte 자료형인 이유는 그림정보이므로 2진수를 보내야되서
+	public ResponseEntity<byte[]> getFile(String fileName) {
+		log.info("fileName: " + fileName);
+		
+		File file = new File("c:\\upload_data\\temp\\" + fileName);
+		
+		log.info("file : " + file);
+		
+		ResponseEntity<byte[]> result = null;
+		
+		try {
+			// 스프링쪽 HttpHeaders import 하기 // java.net으로 임포트시 생성자가 오류남
+			HttpHeaders header = new HttpHeaders();
+			
+			// 이 메시지를 통해서 헤더부분의 파일정보가 들어감
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			
+			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file),header, HttpStatus.OK);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String fileName) {
+		log.info("download file: " + fileName);
+		Resource resource = new FileSystemResource("C:\\upload_data\\temp\\" + fileName);
+		
+		log.info("resource: " + resource);
+		
+		String resourceName = resource.getFilename();
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		try {
+			headers.add("Content-Disposition", "attachment; filename=" + 
+						new String(resourceName.getBytes("UTF-8"),"ISO-8859-1"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+				
+	}
+	
+	@PostMapping("/deleteFile")
+	@ResponseBody
+	public ResponseEntity<String> deleteFile(String fileName, String type) {
+		log.info("deleteFile : " + fileName);
+		
+		File file = null;
+		
+		try {
+			file = new File("C:\\upload_data\\temp\\" + URLDecoder.decode(fileName, "UTF-8"));
+			
+			file.delete();
+			log.info("이미지 타입체크 : " + type);
+			log.info("이미지 여부 : " + type.equals("image"));
+			if(type.equals("image")) {
+				String largeFileName = file.getAbsolutePath().replace("s_","");
+				
+				log.info("largeFileName : " + largeFileName);
+				
+				file = new File(largeFileName);
+				
+				file.delete();
+				}
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<String>("deleted" , HttpStatus.OK);
+		
+	}
 	
 }

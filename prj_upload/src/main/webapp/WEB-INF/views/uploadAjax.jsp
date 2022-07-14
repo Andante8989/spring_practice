@@ -125,7 +125,7 @@
 						console.log(fileCallPath2);
 						str += `<li><a href='/download?fileName=\${fileCallPath2}'>
 						<img src='/display?fileName=\${fileCallPath}'>\${obj.fileName}</a>
-						<span data-file='\${fileCallPath2}' data-type='image'>X<span>
+						<span data-file='\${fileCallPath}' data-type='image'>X<span>
 						</li>`;
 					}
 					
@@ -146,9 +146,19 @@
 			// 클릭한 span태그와 엮여잇는 li를 tagetLi에 저장
 			let targetLi = $(this).closest("li");
 			
-			// 클릭한 li요소를 화면에서 삭제함(파일은 남아있음)
-			targetLi.remove();
-		});
+			
+			$.ajax({
+				url : '/deleteFile',
+				data: {fileName : targetFile, type : type},
+				dataType : 'text',
+				type : 'POST',
+				success: function(result) {
+					alert(result);
+					// 클릭한 li요소를 화면에서 삭제함(파일삭제 후 화면에서도 삭제)
+					targetLi.remove();
+				}
+			}); // ajax 끝
+		}); // click span
 
 	
 	
