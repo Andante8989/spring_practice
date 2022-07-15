@@ -5,8 +5,8 @@
 <mapper namespace="com.ict.mapper.BoardAttachMapper">
 
 	<insert id="insert">
-		INSERT INTO ictimage (uuid, uploadpath, filename, filetype, bno)
-			VALUES (#{uuid}, #{uploadPath}, #{filename}, #{fileType}, #{bno})
+		INSERT INTO ictimage (uuid, uploadpath, fileName, filetype, bno)
+			VALUES (#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno})
 	</insert>
 	
 	<delete id="delete">

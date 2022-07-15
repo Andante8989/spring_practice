@@ -58,9 +58,15 @@
 	
 	<!-- 현재 insert는 BoardVO를 파라미터로 받고 있습니다
 	이 , 경우 VO 내부 변수를 #{변수명} 으로 쿼리문에 전달 할 수 있습니다
-	${변수명}이 아님을 주의해주세요. -->
+	${변수명}이 아님을 주의해주세요.
+	
+	현재 로직으로는 bno에 들어갈 값을 미리 알 수 없으므로, insert구문 실행 이전에 먼저
+	bno값을 구해놓고 전달하는 식으로 활용해야 vo내에 bno를 넣어줄 수 있음 -->
 	<insert id="insert">
-		INSERT INTO board_tbl (bno, title, content, writer) VALUES (board_num.nextval, #{title}, #{content}, #{writer})
+		<selectKey keyProperty="bno" keyColumn="bno" resultType="long" order="BEFORE">
+			SELECT board_num.nextval FROM dual
+		</selectKey>
+		INSERT INTO board_tbl (bno, title, content, writer) VALUES (#{bno}, #{title}, #{content}, #{writer})
 	</insert>
 	
 	<delete id="delete">

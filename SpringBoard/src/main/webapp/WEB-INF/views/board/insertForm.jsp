@@ -31,7 +31,8 @@
 	글 제목 : <input type="text" name="title" placeholder="글 제목을 적어주세요" required><br/>
 	<p>글 내용</p><textarea cols="50" rows="12" name="content" required></textarea><br/>
 	작성자 : <input type="text" name="writer" placeholder="작성자를 적어주세요" required><br/>
-	<input type="submit" value="작성하기">
+	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
+	<input type="submit" id="submitBtn" value="작성하기">
 </form>
 
 
@@ -151,8 +152,6 @@
 				uploadResult.append(str);
 			} // showUploadedFile
 
-			
-			
 		}); // documnet ready
 		
 		$(".uploadResult").on("click", "span", function(e) {
@@ -180,6 +179,39 @@
 				}
 			}); // ajax 끝
 		}); // click span
+		
+		
+		
+		
+		$("#submitBtn").on("click", function(e){
+			// 버튼의 제출기능 막기
+			e.preventDefault();
+			
+			// let formObj = $("form";)으로 폼태그를 가져옵니다.
+			let formObj = $("form");
+			
+			// 첨부파일과 관련된 정보를 hidden태그들로 만들어 문자로 먼저 저장합니다.
+			let str = "";
+			
+			$(".uploadResult ul li").each(function(i, obj) {
+				
+				let jobj = $(obj);
+				
+				str += `<input type='hidden' name='attachList[\${i}].fileName' value='\${jobj.data("filename")}'>
+					<input type='hidden' name='attachList[\${i}].uuid' value='\${jobj.data("uuid")}'>
+					<input type='hidden' name='attachList[\${i}].uploadPath' value='\${jobj.data("path")}'>
+					<input type='hidden' name='attachList[\${i}].fileType' value='\${jobj.data("type")}'>`
+					console.log(str);
+			});
+			
+			// formObj에 appen를 이용해 str을 끼워넣습니다
+			formObj.append(str);
+			
+			// formObj.submit()을 이용해 제출기능이 실행되도록합니다
+			formObj.submit();
+			
+		});
+		
 
 
 	

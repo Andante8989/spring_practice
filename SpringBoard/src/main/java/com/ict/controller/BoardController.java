@@ -125,6 +125,14 @@ public class BoardController {
 		// redirect를 사용해야 전체 글 목록을 로딩해온 다음 화면을 열어줍니다
 		// 스프링 컨트롤러에서 리다이렉트를 할 때는
 		// 목적주소 앞에 redirect: 를 추가로 붙입니다.
+		
+
+		log.info("-----------------");
+		log.info("register : " + board);
+		
+		if(board.getAttachList() != null) {
+			board.getAttachList().forEach(attach -> log.info(attach));
+		}
 		return "redirect:/board/list";
 	}
 	
