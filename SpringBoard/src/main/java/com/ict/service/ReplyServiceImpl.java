@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ict.mapper.BoardAttachMapper;
 import com.ict.mapper.BoardMapper;
 import com.ict.mapper.ReplyMapper;
 import com.ict.persistent.ReplyVO;
@@ -18,6 +19,9 @@ public class ReplyServiceImpl implements ReplyService {
 	
 	@Autowired
 	private BoardMapper boardMapper;
+	
+	@Autowired
+	private BoardAttachMapper attachMapper;
 	
 	@Override
 	public void addReply(ReplyVO vo) {
@@ -42,6 +46,7 @@ public class ReplyServiceImpl implements ReplyService {
 		Long bno = mapper.getBno(rno);
 		// 댓글 삭제
 		mapper.delete(rno);
+		attachMapper.deleteAll(rno);
 		// 댓글 삭제 후에 updateReplyCount를 실행해 해당 bno번 글 정보의 댓글개수를 1개 차감
 		// 테스트삼아 댓글 삭제를 SQLDeveloper에서 햇을 경우, commit을 반드시 해 주신 다음
 		// 해당 로직을 테스트해야 정상적으로 서버가 처리됩니다. commit을 안하면

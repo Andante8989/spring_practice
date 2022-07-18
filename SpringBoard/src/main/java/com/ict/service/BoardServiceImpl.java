@@ -8,11 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ict.mapper.BoardAttachMapper;
 import com.ict.mapper.BoardMapper;
+import com.ict.mapper.ReplyMapper;
+import com.ict.persistent.BoardAttachVO;
 import com.ict.persistent.BoardVO;
 import com.ict.persistent.Criteria;
 import com.ict.persistent.SearchCriteria;
 
+import lombok.extern.log4j.Log4j;
+
 @Service
+@Log4j
 public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
@@ -20,6 +25,9 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardAttachMapper attachMapper;
+	
+	@Autowired
+	private ReplyMapper replyMapper;
 
 	@Override
 	public List<BoardVO> getList(SearchCriteria cri) {
@@ -29,6 +37,8 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	@Override
 	public void insert(BoardVO vo) {
+		log.info("글 및 첨부파일 insert");
+		log.info(vo);
 		mapper.insert(vo);
 		if(vo.getAttachList() == null || vo.getAttachList().size() <= 0) {
 			return;
@@ -38,9 +48,12 @@ public class BoardServiceImpl implements BoardService {
 			attachMapper.insert(attach);
 		});
 	}
-
+	
+	@Transactional
 	@Override
 	public void delete(Long bno) {
+		replyMapper.deleteAll(bno);
+		attachMapper.deleteAll(bno);
 		mapper.delete(bno);
 	}
 
@@ -57,6 +70,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Long getBoardCount(SearchCriteria cri) {
 		return mapper.getBoardCount(cri);
+	}
+
+	@Override
+	public List<BoardAttachVO> getAttachList(Long bno) {
+		return attachMapper.findByBno(bno);
 	}
 
 	

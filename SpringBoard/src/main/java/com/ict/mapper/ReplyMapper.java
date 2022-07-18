@@ -16,4 +16,6 @@ public interface ReplyMapper {
 	
 	// 댓글번호 rno 입력시 해당 댓글이 속한 글번호 bno를 리턴받는 쿼리문
 	public Long getBno(Long rno);
+	
+	public void deleteAll(Long bno);
 }

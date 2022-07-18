@@ -2,6 +2,7 @@ package com.ict.service;
 
 import java.util.List;
 
+import com.ict.persistent.BoardAttachVO;
 import com.ict.persistent.BoardVO;
 import com.ict.persistent.Criteria;
 import com.ict.persistent.SearchCriteria;
@@ -26,4 +27,7 @@ public interface BoardService {
 	
 	// mapper에서 그대로 가져옵니다
 	public Long getBoardCount(SearchCriteria cri);
+	
+	public List<BoardAttachVO> getAttachList(Long bno);
+	
 }

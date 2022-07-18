@@ -159,7 +159,7 @@
 			let targetFile = $(this).data("file");
 			// 이미지 여부를 span태그 내부의 data-type에서 얻어와서 저장
 			let type= $(this).data("type");
-			
+			console.log(type);
 			// 클릭한 span태그와 엮여잇는 li를 tagetLi에 저장
 			let targetLi = $(this).closest("li");
 			

@@ -5,6 +5,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+
+	#uploadResult {
+		width : 100%;
+		background-color : gray;
+	}
+	
+	#uploadResult ul {
+		display : flex;
+		flex-flow : row;
+		justify-content : center;
+		align-items : center;
+	}
+	
+	#uploadResult ul li {
+		list-style : none;
+		padding: 10px;
+		align-content : center;
+		text-align : center;
+	}
+	
+	#uploadResult ul li img {
+		width : 100%;
+	}
+</style>
 <link rel="stylesheet" href="/resources/modal.css">
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -21,6 +46,7 @@ ${board }<br/>
 	<input type="hidden" name="keyword" value="${param.keyword }">
 	<input type="hidden" name="searchType" value="${param.searchType }">
 	<input type="hidden" name="page" value="${param.page }">
+	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
 	<input type="submit" value="삭제하기">
 </form>
 <a href="/board/list?page=${param.page}&searchType=${param.searchType}&keyword=${param.keyword}"><button>목록으로 돌아가기</button></a>
@@ -29,8 +55,22 @@ ${board }<br/>
 	<input type="hidden" name="keyword" value="${param.keyword }">
 	<input type="hidden" name="searchType" value="${param.searchType }">
 	<input type="hidden" name="page" value="${param.page }">
+	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
 	<input type="submit" value="수정하기">
 </form>
+
+
+	<!-- 첨부파일 영역 -->
+	<div class="row">
+		<h3 class="text-primary">첨부파일</h3>
+		<div id="uploadResult">
+			<ul>
+				<!-- 첨부파일 들어갈 위치 -->
+			</ul>
+		</div>
+	</div><!-- row -->
+	
+	
 <div id="modDiv" style="display:none;">
 	<div class="modal-title"></div>
 	<div>
@@ -67,6 +107,8 @@ ${board }<br/>
 			<button type="button" class="btn btn-info" id="replyAddBtn">Add Reply</button>
 		</div><!-- footer -->
 	</div><!-- row -->
+	
+
 	
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -150,8 +192,51 @@ ${board }<br/>
 				}
 			}
 		});
-	});
 
+	}); // 글 등록 로직 종료
+	
+	
+	// 익명함수 선언 및 호출
+	// 우선 함수이기 때문에 호출한다는 점을 명시하기 위해 마지막에 ()를 추가로 붙여준다.
+	(function() {
+		$.getJSON("/board/getAttachList", {bno : bno}, function(arr) {
+			console.log(arr);
+			
+			let str = "";
+			
+			$(arr).each(function(i, attach) {
+				// 이미지파일인 경우
+				if(attach.fileType) {
+					let fileCallPath = encodeURIComponent(attach.uploadPath + "/s_" + 
+							attach.uuid + "_" + attach.fileName);
+					console.log(fileCallPath);
+					str += `<li data-path='\${attach.uploadPath}' data-uuid='\${attach.uuid}' data-filename='\${attach.fileName}' data-fileType='\${attach.fileType}'>
+								<div>
+									<img src='/board/display?fileName=\${fileCallPath}'>
+								</div>
+							</li>`;
+				} else {
+					// 이미지가 아닌 파일의 경우
+					str += `<li data-path='\${attach.uploadPath}' data-uuid='\${attach.uuid}' data-filename='\${attach.fileName}' data-type='\${attach.fileType}'>
+								<div>
+									<span<\${attach.fileName}</span><br/>
+									<img src='/resources/attach.png' width='100px' height='100px'>
+								</div>
+							</li>`;
+				}
+			});
+			//위에서 str변수에 작성된 태그 형식을 화면에 끼워넣기
+			$("#uploadResult ul").html(str);
+		});
+	})(); // 익명함수 종료
+	
+	
+	$("#uploadResult").on("click", "li", function(e) {
+		let liObj = $(this);
+		let path = encodeURIComponent(liObj.data("path") + "/" + liObj.data("uuid") + "_" + liObj.data("filename"));
+		
+		self.location = "/board/download?fileName=" + path;
+	})
 	
 	
 	</script>
