@@ -139,7 +139,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@PreAuthorize("ROLE_ADMIN")
+
 	// 글삭제 post방식으로 처리하도록 합니다
 	@PostMapping("/delete")
 	public String deleteBoard(Long bno) {
@@ -162,7 +162,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@PreAuthorize("ROLE_ADMIN")
+
 	// 글 수정 요청도 post로 받습니다
 	@PostMapping("/updateForm")
 	public String updateBoardForm(Long bno, Model model) {
