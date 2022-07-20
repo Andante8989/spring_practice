@@ -114,13 +114,13 @@ public class BoardController {
 	// 글 쓰기는 말 그대로 글을 써주는 로직인데
 	// 폼으로 연결되는 페이지가 하나 있어야하고
 	// 그다음 폼에서 날려주는 로직을 처리해주는 페이지가 하나 더 있어야 합니다.
-	@PreAuthorize("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')")
+
 	@GetMapping("/insert")
 	public String insertForm() {
 		return "/board/insertForm";
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')")
+
 	// post방식으로 /insert로 들어오는 자료를 받아  콘솔에 찍어주세요
 	@PostMapping("/insert")
 	public String boardInsert(BoardVO board) {

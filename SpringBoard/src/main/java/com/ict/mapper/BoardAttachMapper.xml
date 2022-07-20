@@ -20,6 +20,10 @@
 	<delete id="deleteAll">
 		DELETE FROM ictimage WHERE bno=#{bno}
 	</delete>
+	
+	<select id="getOldFiles" resultType="com.ict.persistent.BoardAttachVO">
+		SELECT * FROM ictimage WHERE uploadpath = to_char(sysdate - 1, 'yyyy\mm\dd')
+	</select>
 
 
 </mapper>
