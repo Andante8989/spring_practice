@@ -21,6 +21,9 @@ public class BoardMapperTests {
 	@Autowired
 	private BoardMapper mapper;
 	
+	@Autowired
+	private MovieMapper mapper2;
+	
 	//@Test
 	public void testGetList() {
 		//log.info(mapper.getList());
@@ -62,9 +65,14 @@ public class BoardMapperTests {
 		log.info(mapper.boardDetail(2L));
 	}
 	
-	@Test
+	//@Test
 	public void testRemoveReply() {
 		
+	}
+	
+	@Test
+	public void testGetMovie() {
+		log.info(mapper2.topMovie());
 	}
 }
 

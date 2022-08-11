@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ict.mapper.MovieMapper">
+
+	<resultMap type="com.ict.persistent.MovieVO" id="movieMap">
+		<result property="movieNm" column="movieNm" />
+		<result property="audiCnt" column="audiCnt" />
+	</resultMap>
+
+	<select id="getList" resultType="com.ict.persistent.MovieVO">
+		SELECT * FROM movieTbl
+	</select>
+
+	<select id="getMovieList" resultType="com.ict.persistent.MovieVO">
+		SELECT * FROM movieTbl
+	</select>
+	
+	
+	<select id="topMovie" resultType="movieMap">
+		select movieNm, sum(audiCnt)"관람객수" from movieTbl group by movieNm
+	</select>
+</mapper>

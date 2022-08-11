@@ -28,6 +28,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,9 +39,12 @@ import com.ict.persistent.AttachFileDTO;
 import com.ict.persistent.BoardAttachVO;
 import com.ict.persistent.BoardVO;
 import com.ict.persistent.Criteria;
+import com.ict.persistent.MovieVO;
 import com.ict.persistent.PageMaker;
+import com.ict.persistent.ReplyVO;
 import com.ict.persistent.SearchCriteria;
 import com.ict.service.BoardService;
+import com.ict.service.MovieService;
 
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -55,6 +59,9 @@ public class BoardController {
 	// 컨트롤러는 ???를 호출합니다. autowired로 주입해주세요.
 	@Autowired
 	private BoardService service;
+	
+	@Autowired
+	private MovieService service2;
 	
 	// 파일 업로드시 보조해주는 메서드 추가
 	private boolean checkImageType(File file) {
@@ -353,5 +360,23 @@ public class BoardController {
 		}); // forEach 끝나는지점
 	}
 	
+	
+	@ResponseBody
+	@GetMapping(value="/getMovie", produces={MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_UTF8_VALUE})
+	public ResponseEntity<List<MovieVO>> movieChart(){
+		
+		ResponseEntity<List<MovieVO>> entity = null;
+		
+		
+		try {
+			entity = new ResponseEntity<>(
+					service2.topMovie(), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
 	
 }

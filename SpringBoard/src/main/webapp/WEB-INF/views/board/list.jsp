@@ -102,6 +102,8 @@
 	<button id="searchBtn">Search</button><br/>
 	${pageMaker }
 	
+	<a href="/board/getMovie"><button id="movie">영화차트 보러가기</button></a>
+	
 	<script>
 	<!--  검색버튼 작동 --> 
 	$('#searchBtn' ).on("click", function(event){
